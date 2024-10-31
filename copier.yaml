@@ -1,0 +1,18 @@
+## Copier Configuration
+# https://copier.readthedocs.io/en/stable/configuring/
+_subdirectory: skeleton
+_answers_file: .copier-answers.copier-python-project.yml
+
+# Questions
+# For a complete list of prompt options, see https://copier.readthedocs.io/en/stable/configuring/#advanced-prompt-formatting
+project_name:
+  type: str
+  help: Provide the project name
+
+description:
+  type: str
+  help: Provide a short description of the project
+
+authors:
+  type: str
+  help: Provide a list of authors in format "Firstname Lastname <email>, Firstname Lastname <email>, ..."
