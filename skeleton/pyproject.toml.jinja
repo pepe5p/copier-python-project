@@ -7,6 +7,7 @@ readme = "README.md"
 
 [tool.poetry.dependencies]
 python = "^3.13"
+dumb-init = "^1.2.5.post1"
 
 [tool.poetry.group.dev.dependencies]
 black = "^24.10.0"
@@ -39,6 +40,8 @@ exclude_lines = [
 code = ["src"]
 deps = ["pyproject.toml"]
 ignore_unused = [
+    "dumb-init",
+
     # Dev dependencies. This list should contain ALL of them!
     "black",
     "fawltydeps",
