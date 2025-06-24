@@ -24,14 +24,12 @@ Familiarize yourself with the [copier templating engine](https://copier.readthed
 ### Prerequisities
 
 1. Install python 3.11 or greater. Consider using [pyenv](https://github.com/pyenv/pyenv#installation) if you work with multiple python versions
-2. Install [poetry](https://python-poetry.org/docs/#installation)
-3. configure poetry to use a local virtualenv: `poetry config virtualenvs.in-project true`
-4. Install project dependencies: `poetry install`
+2. Install [uv](https://github.com/astral-sh/uv#installation)
+3. Install project dependencies: `uv sync --dev`
 
 ### Running tests
 
-1. activate virtualenv: `source .venv/bin/activate`
-2. run `pytest` in your root directory
+1. run `uv run pytest` in your root directory
 
 ### Running template localy
 
