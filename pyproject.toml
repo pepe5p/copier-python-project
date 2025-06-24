@@ -4,9 +4,7 @@ version = "0.1.0"
 description = "Template for empty dockerized python project."
 authors = [{ name = "Piotr Karaś", email = "pepe500p@gmail.com" }]
 requires-python = ">=3.11"
-dependencies = [
-    "hatchling>=1.27.0",
-]
+dependencies = []
 
 [dependency-groups]
 dev = [
@@ -16,10 +14,6 @@ dev = [
 
 [tool.uv]
 package = false
-
-[build-system]
-requires = ["hatchling"]
-build-backend = "hatchling.build"
 
 [tool.pytest.ini_options]
 python_files = ["tests.py", "test_*.py", "*_tests.py"]
