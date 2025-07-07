@@ -1,16 +1,16 @@
-# {{ project_name }}
+# {{ project_name_title_case }}
 
 {{ description }}
 
 {%- if docker %}
 1. Build docker image:
     ```
-    docker compose build {{ project_name }}
+    docker compose build {{ project_name_snake_case }}
     ```
 
 2. Run docker container:
     ```
-    docker compose {{ project_name }} run bash
+    docker compose {{ project_name_snake_case }} run bash
     ```
     or with just
     ```

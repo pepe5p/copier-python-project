@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 
-export APP=${APP:-{{project_name}}}
+export APP=${APP:-{{project_name_kebab_case}}}
 
 function log() {
   local date status message

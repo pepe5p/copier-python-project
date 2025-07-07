@@ -7,7 +7,33 @@ _answers_file: .copier-answers.copier-python-project.yml
 # For a complete list of prompt options, see https://copier.readthedocs.io/en/stable/configuring/#advanced-prompt-formatting
 project_name:
   type: str
-  help: Provide the project name (snake case, e.g. my_project)
+  help: Provide the project name (use kebab-case, e.g. my-project-name)
+
+# Computed variables for different case formats
+sanitized_project_name:
+  type: str
+  default: "{{ project_name | trim }}"
+  when: false
+
+project_name_kebab_case:
+  type: str
+  default: "{{ sanitized_project_name }}"
+  when: false
+
+project_name_snake_case:
+  type: str
+  default: "{{ sanitized_project_name | replace('-', '_') }}"
+  when: false
+
+project_name_flat_case:
+  type: str
+  default: "{{ sanitized_project_name | replace('-', '') }}"
+  when: false
+
+project_name_title_case:
+  type: str
+  default: "{{ sanitized_project_name | replace('-', ' ') | title }}"
+  when: false
 
 description:
   type: str
