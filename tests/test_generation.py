@@ -8,7 +8,8 @@ JINJA_LEFTOVERS = ["{%", "{#", "%}", "#}"]
 TEST_ANSWERS = {
     "project_name": "test-project",
     "description": "A test project",
-    "authors": "Test Test <test@test.test>",
+    "author_name": "Test Test",
+    "author_email": "test@test.test"
 }
 
 

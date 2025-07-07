@@ -1,7 +1,7 @@
 [project]
 name = "copier-python-project"
 version = "0.1.0"
-description = "Template for empty dockerized python project."
+description = "Template for python project."
 authors = [{ name = "Piotr Karaś", email = "pepe500p@gmail.com" }]
 requires-python = ">=3.11"
 dependencies = []

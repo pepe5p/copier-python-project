@@ -7,12 +7,21 @@ _answers_file: .copier-answers.copier-python-project.yml
 # For a complete list of prompt options, see https://copier.readthedocs.io/en/stable/configuring/#advanced-prompt-formatting
 project_name:
   type: str
-  help: Provide the project name
+  help: Provide the project name (snake case, e.g. my_project)
 
 description:
   type: str
   help: Provide a short description of the project
 
-authors:
+author_name:
   type: str
-  help: Provide a list of authors in format "Firstname Lastname <email>, Firstname Lastname <email>, ..."
+  help: Provide an author name in format "Firstname Lastname"
+
+author_email:
+  type: str
+  help: Provide the author's email address
+
+docker:
+  type: bool
+  default: true
+  help: Enable Docker support

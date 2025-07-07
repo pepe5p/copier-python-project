@@ -21,7 +21,7 @@ Familiarize yourself with the [copier templating engine](https://copier.readthed
 > If file not ends on `.jinja`, it will be copy-pasted as is.
 > When you add `.jinja` - make sure that there will no conflicts between template languages, or just wrap everything not related to copier templating in `{%raw%}` `{%endraw%}`
 
-### Prerequisities
+### Prerequisites
 
 1. Install python 3.11 or greater. Consider using [pyenv](https://github.com/pyenv/pyenv#installation) if you work with multiple python versions
 2. Install [uv](https://github.com/astral-sh/uv#installation)
@@ -31,6 +31,6 @@ Familiarize yourself with the [copier templating engine](https://copier.readthed
 
 1. run `uv run pytest` in your root directory
 
-### Running template localy
+### Running template locally
 
 1. copier cli: `copier copy . test-folder-path`
