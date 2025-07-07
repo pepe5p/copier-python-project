@@ -16,3 +16,8 @@ description:
 authors:
   type: str
   help: Provide a list of authors in format "Firstname Lastname <email>, Firstname Lastname <email>, ..."
+
+docker:
+  type: bool
+  default: true
+  help: Enable Docker support

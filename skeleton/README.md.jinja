@@ -2,6 +2,7 @@
 
 {{ description }}
 
+{%- if docker %}
 1. Build docker image:
     ```
     docker compose build {{ project_name }}
@@ -20,3 +21,4 @@
     ```
     make test
     ```
+{%- endif %}
