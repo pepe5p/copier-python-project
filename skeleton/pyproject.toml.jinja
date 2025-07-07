@@ -2,7 +2,7 @@
 name = "{{ project_name }}"
 version = "0.1.0"
 description = "{{ description }}"
-authors = ["{{ authors | replace(',', '", "') }}"]
+authors = [{ name = "{{ author_name }}", email = "{{ author_email }}" }]
 requires-python = ">=3.13"
 readme = "README.md"
 dependencies = []
@@ -38,13 +38,9 @@ exclude_lines = [
 ]
 
 [tool.fawltydeps]
-code = ["src"]
+code = ["{{ project_name }}"]
 deps = ["pyproject.toml"]
 ignore_unused = [
-{%- if docker %}
-    "dumb-init",
-
-{%- endif %}
     # Dev dependencies. This list should contain ALL of them!
     "black",
     "copier",

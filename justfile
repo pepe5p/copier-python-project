@@ -11,9 +11,15 @@ recopy output="test_folder":
     --skip-answered \
     --overwrite
 
+update output="test_folder":
+    uv run copier recopy {{ output }} \
+    --vcs-ref=HEAD \
+    --answers-file .copier/.copier-answers.{{ PROJECT_NAME }}.yml \
+    --overwrite
+
 all_ff output="test_folder":
     just recopy {{ output }}
-    just all_ff --justfile {{ output }}/justfile
+    just --justfile {{ output }}/justfile all_ff
 
 test:
 	uv run pytest
