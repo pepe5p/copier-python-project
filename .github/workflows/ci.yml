@@ -13,16 +13,11 @@ jobs:
     steps:
       - name: checkout repository
         uses: actions/checkout@v3
-    {%- if docker %}
 
-      - name: run linters and tests
-        run: just dc _ci
-    {%- else %}
-
-      - name: setup python
+      - name: Set up python
         uses: actions/setup-python@v3
         with:
-          python-version: 3.13
+          python-version: 3.11
 
       - name: install dependencies
         run: |
@@ -34,11 +29,10 @@ jobs:
         run: |
           sudo apt install just
 
-      - name: run linters
-        run: |
-          just _ci_lint
-
       - name: run tests
         run: |
-          just _ci_test
-    {%- endif %}
+          just test
+
+      - name: run linters in test catalog
+        run: |
+          just ci_lint_full
