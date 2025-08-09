@@ -19,4 +19,4 @@ htmlcov
 .pytest_cache/
 /.vscode/
 .mypy_cache
-test_folder/
+test_catalog/

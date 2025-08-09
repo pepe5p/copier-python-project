@@ -1,5 +1,5 @@
 [project]
-name = "{{ project_name }}"
+name = "{{ project_name_kebab_case }}"
 version = "0.1.0"
 description = "{{ description }}"
 authors = [{ name = "{{ author_name }}", email = "{{ author_email }}" }]
@@ -38,7 +38,7 @@ exclude_lines = [
 ]
 
 [tool.fawltydeps]
-code = ["{{ project_name }}"]
+code = ["{{ project_name_snake_case }}"]
 deps = ["pyproject.toml"]
 ignore_unused = [
     # Dev dependencies. This list should contain ALL of them!
@@ -49,7 +49,6 @@ ignore_unused = [
     "flake8-pyproject",
     "isort",
     "mypy",
-    "poetry-dynamic-versioning",
     "pytest",
     "pytest-cov",
 ]
@@ -64,6 +63,7 @@ max-line-length = 120
 profile = "black"
 line_length = 120
 order_by_type = false
+known_first_party = ["{{ project_name_snake_case }}"]
 
 [tool.mypy]
 disallow_untyped_defs = true
