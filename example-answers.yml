@@ -1,0 +1,5 @@
+author_email: author@email.test
+author_name: test-author
+description: Service description.
+docker: true
+project_name: test-service

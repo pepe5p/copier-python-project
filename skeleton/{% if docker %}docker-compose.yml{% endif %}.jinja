@@ -1,6 +1,21 @@
+x-{{ project_name_kebab_case }}: &{{ project_name_kebab_case }}-config
+  environment:
+    - FLAVOR=localdev
+  image: {{ project_name_flat_case }}-dev
+  pull_policy: never
+  volumes:
+    - "./:/code/"
+  env_file:
+    - .env
+
+
 services:
+  # Please do not set ports here. Use docker-compose.override.yml to set ports. You can find an example in docker-compose.override.yml.example
   {{ project_name_snake_case }}:
+    <<: *{{ project_name_kebab_case }}-config
     build:
-      context: .
-    volumes:
-      - ./:/code/
+      context: ./
+      args:
+        - BUILD_COMMIT_SHA=localdev
+    command: >-
+      bash -c "uv run --no-sync python main:app --host 0.0.0.0 --reload --port 80"

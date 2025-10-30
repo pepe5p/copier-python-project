@@ -23,7 +23,7 @@ Familiarize yourself with the [copier templating engine](https://copier.readthed
 
 ### Prerequisites
 
-1. Install python 3.11 or greater. Consider using [pyenv](https://github.com/pyenv/pyenv#installation) if you work with multiple python versions
+1. Install python 3.13 or greater. Consider using [pyenv](https://github.com/pyenv/pyenv#installation) if you work with multiple python versions
 2. Install [uv](https://github.com/astral-sh/uv#installation)
 3. Install project dependencies: `uv sync --dev`
 
