@@ -14,7 +14,7 @@ function log() {
 
 if [[ $1 =~ ^(/bin/)?(ba)?sh$ ]]; then
   log INFO "First CMD argument is a shell: $1"
-  log INFO "Running: exec ${@@Q}"
+  log INFO "Running: exec " "${@@Q}"
   exec "$@"
 elif [[ "$*" =~ ([;<>]|\(|\)|\&\&|\|\|) ]]; then
   log INFO "Shell metacharacters detected, passing CMD to bash"
@@ -27,5 +27,5 @@ fi
 # Use dumb-init to ensure proper handling of signals, zombies, etc.
 # See https://github.com/Yelp/dumb-init
 
-log INFO "Running command: dumb-init ${@@Q}"
+log INFO "Running command: dumb-init " "${@@Q}"
 exec dumb-init "$@"

@@ -18,8 +18,8 @@ jobs:
         uses: extractions/setup-just@v3
     {%- if docker %}
 
-      - name: run linters and tests
-        run: just dc _ci
+      - name: "Run linters and tests"
+        run: just dc all
     {%- else %}
 
       - name: "Set up Python"
