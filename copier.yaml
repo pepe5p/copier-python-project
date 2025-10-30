@@ -51,3 +51,7 @@ docker:
   type: bool
   default: true
   help: Enable Docker support
+
+tasks:
+  # Make entrypoint executable if it exists
+  - [invoke, "chmod +x docker-entrypoint.sh || true", after-copy]

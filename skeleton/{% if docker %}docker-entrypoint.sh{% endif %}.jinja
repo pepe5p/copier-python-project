@@ -24,5 +24,8 @@ elif [[ "$*" =~ ([;<>]|\(|\)|\&\&|\|\|) ]]; then
   exec /bin/bash -c "$*"
 fi
 
-log INFO "Running command: /usr/local/bin/dumb-init ${@@Q}"
-exec /usr/local/bin/dumb-init "$@"
+# Use dumb-init to ensure proper handling of signals, zombies, etc.
+# See https://github.com/Yelp/dumb-init
+
+log INFO "Running command: dumb-init ${@@Q}"
+exec dumb-init "$@"
