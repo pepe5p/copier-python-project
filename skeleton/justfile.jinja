@@ -1,8 +1,12 @@
 set dotenv-load
 
+{% if docker -%}
 CONTAINER_NAME := "{{ project_name_snake_case }}"
+{% endif -%}
 PYTHONPATH := "./{{ project_name_snake_case }}"
+{%- if docker %}
 WORKDIR := "/code"
+{%- endif %}
 PATHS_TO_LINT := "{{ project_name_snake_case }} tests"
 TEST_PATH := "tests"
 ANSWERS_FILE := ".copier/.copier-answers.copier-python-project.yml"
