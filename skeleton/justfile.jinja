@@ -22,13 +22,15 @@ all: lint_full test
 [group("development")]
 [doc("Run all checks and tests, but fail on first that returns error (lints, mypy, tests...)")]
 all_ff: lint_full_ff test
-
-{% endraw -%}
+{%- endraw -%}
 {%- if docker -%}
+{%- raw %}
+
 [group("development")]
 [doc("Open bash console (useful when prefixed with dc, as it opens bash inside docker)")]
 @bash:
 	bash
+{%- endraw -%}
 {%- endif -%}
 {%- raw %}
 
@@ -43,10 +45,10 @@ ruff:
 copier_update answers=ANSWERS_FILE skip-answered="true":
 	uv run copier update --answers-file {{answers}} \
 	{{ if skip-answered == "true" { "--skip-answered" } else { "" } }}
-
-{% endraw -%}
+{%- endraw -%}
 {%- if docker -%}
-{%- raw -%}
+{%- raw %}
+
 [group("development")]
 [doc("Run any command inside docker (e.g. just dc bash)")]
 dc command *args:

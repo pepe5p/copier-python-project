@@ -76,9 +76,9 @@ deps = ["pyproject.toml"]
 ignore_unused = [
     # Dev dependencies. This list should contain ALL of them!
     "copier",
-    {% if docker %}
+    {%- if docker %}
     "dotenv-linter",
-    {% endif %}
+    {%- endif %}
     "fawltydeps",
     "ipython",
     "mypy",
@@ -88,9 +88,9 @@ ignore_unused = [
     "pytest-env",
     {%- endif %}
     "pytest-mock",
-    {% if docker %}
+    {%- if docker %}
     "python-dotenv",
-    {% endif %}
+    {%- endif %}
     "pytest",
     "ruff",
 ]

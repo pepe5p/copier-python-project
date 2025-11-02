@@ -2,6 +2,11 @@ TEST_CATALOG := "test_catalog"
 DEFAULT_OUTPUT := TEST_CATALOG + "/generated_project"
 DOCKER_OUTPUT := TEST_CATALOG + "/dockerized_project"
 PLAIN_OUTPUT := TEST_CATALOG + "/plain_project"
+
+TEST_ANSWERS := "test_answers"
+DOCKER_ANSWERS := TEST_ANSWERS + "/docker.yml"
+PLAIN_ANSWERS := TEST_ANSWERS + "/plain.yml"
+
 PATHS_TO_LINT := "tests"
 
 [doc("Command run when 'just' is called without any arguments")]
@@ -85,12 +90,18 @@ lint_fix:
 
 [group("development")]
 [group("generation")]
-generation_check_docker data_file="test_answers/docker.yml" output=DOCKER_OUTPUT:
+generation_check_docker data_file=DOCKER_ANSWERS output=DOCKER_OUTPUT:
     just copy {{ data_file }} {{ output }}
     just output_all_ff_docker {{ output }}
 
 [group("development")]
 [group("generation")]
-generation_check  data_file="test_answers/plain.yml" output=PLAIN_OUTPUT:
+generation_check data_file=PLAIN_ANSWERS output=PLAIN_OUTPUT:
     just copy {{ data_file }} {{ output }}
     just output_all_ff {{ output }}
+
+[group("development")]
+[group("generation")]
+copy_all:
+	just copy {{ DOCKER_ANSWERS }} {{ DOCKER_OUTPUT }}
+	just copy {{ PLAIN_ANSWERS }} {{ PLAIN_OUTPUT }}
