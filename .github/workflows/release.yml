@@ -1,11 +1,9 @@
-name: release
-run-name: "Release"
+name: "Release"
 
 on:
   workflow_dispatch:
   workflow_run:
-    workflows:
-      - ci
+    workflows: ["CI - linters and tests"]
     types:
       - completed
     branches:

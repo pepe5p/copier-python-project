@@ -1,5 +1,4 @@
-name: conventional-commit-pr-name
-run-name: "Check PR title matches conventional commit specification"
+name: "Check PR title matches conventional commit specification"
 
 on:
   pull_request:
