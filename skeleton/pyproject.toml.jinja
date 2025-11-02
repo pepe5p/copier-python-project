@@ -10,16 +10,22 @@ dependencies = []
 [dependency-groups]
 dev = [
     "copier>=9.8.0",
+    {%- if docker %}
     "dotenv-linter>=0.4.0,<0.5",
+    {%- endif %}
     "fawltydeps>=0.20.0,<1.0.0",
     "ipython>=8.14.0,<9",
     "mypy>=1.10.0,<2",
     "pytest-asyncio>=0.25.2,<0.26",
     "pytest-cov>=6.0.0,<7",
+    {%- if docker %}
     "pytest-env>=1.1.3,<2",
+    {%- endif %}
     "pytest-mock>=3.14.0,<4",
     "pytest>=8.3.4,<9",
+    {%- if docker %}
     "python-dotenv>=1.0.0,<2",
+    {%- endif %}
     "ruff>=0.14.1",
 ]
 
@@ -70,15 +76,21 @@ deps = ["pyproject.toml"]
 ignore_unused = [
     # Dev dependencies. This list should contain ALL of them!
     "copier",
+    {% if docker %}
     "dotenv-linter",
+    {% endif %}
     "fawltydeps",
     "ipython",
     "mypy",
     "pytest-asyncio",
     "pytest-cov",
+    {%- if docker %}
     "pytest-env",
+    {%- endif %}
     "pytest-mock",
+    {% if docker %}
     "python-dotenv",
+    {% endif %}
     "pytest",
     "ruff",
 ]
@@ -93,8 +105,10 @@ disable_error_code = "misc"
 python_files = ["tests.py", "test_*.py", "*_tests.py"]
 addopts = "--strict-markers -p no:warnings --cov=. --cov-fail-under=90 --cov-config=.coveragerc"
 asyncio_mode = "auto"
+{%- if docker %}
 
 [tool.pytest_env]
 FLAVOR = "test"
 DEBUG = "True"
 SERVICE_NAME = "{{ project_name_kebab_case }}"
+{%- endif %}

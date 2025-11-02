@@ -1,7 +1,7 @@
-PROJECT_NAME := "copier-python-project"
 TEST_CATALOG := "test_catalog"
-COPIER_ANSWERS_CATALOG := ".copier"
-TEST_ANSWERS_FILE := COPIER_ANSWERS_CATALOG + "/.copier-answers." + PROJECT_NAME + ".yml"
+DEFAULT_OUTPUT := TEST_CATALOG + "/generated_project"
+DOCKER_OUTPUT := TEST_CATALOG + "/dockerized_project"
+PLAIN_OUTPUT := TEST_CATALOG + "/plain_project"
 PATHS_TO_LINT := "tests"
 
 [doc("Command run when 'just' is called without any arguments")]
@@ -13,7 +13,7 @@ help:
 
 [group("generation")]
 [doc("Generates repo from template to output directory")]
-copy output=TEST_CATALOG data_file="example-answers.yml":
+copy data_file output=DEFAULT_OUTPUT:
     uv run copier copy . {{ output }} \
     --vcs-ref=HEAD \
     --data-file {{ data_file }} \
@@ -22,44 +22,25 @@ copy output=TEST_CATALOG data_file="example-answers.yml":
     --force
 
 [group("generation")]
-[doc("Deletes the output directory, excluding the answers file (it is remained for re-copying).")]
-clear output=TEST_CATALOG:
-	find "{{ output }}" -mindepth 1 \
-	-not -path "{{ output }}/{{ COPIER_ANSWERS_CATALOG }}" \
-	-not -path "{{ output }}/{{ TEST_ANSWERS_FILE }}" \
-	-delete
-
-[group("generation")]
-[doc("Re-copies the template to the output directory, using the answers file. If clear is true, it deletes the output directory first.")]
-recopy output=TEST_CATALOG clear="true" skip-answered="true":
-	@if {{ clear }}; then \
-		just clear {{ output }}; \
-	fi
-	uv run copier recopy {{ output }} \
-	--vcs-ref=HEAD \
-	--answers-file {{ TEST_ANSWERS_FILE }} \
-	--overwrite \
-	{{ if skip-answered == "true" { "--skip-answered" } else { "" } }}
-
-[group("generation")]
-[doc("Same as `recopy`, but with `skip-answered=false` to allow modifying answers.")]
-update output=TEST_CATALOG clear="true":
-	just recopy output={{ output }} clear={{ clear }} skip-answered=false recopy
-
-[group("generation")]
-[doc("Runs linters and tests in the output directory.")]
-run_lints_and_tests_in_output output=TEST_CATALOG:
+[doc("Runs linters and tests in the output directory (docker variant).")]
+output_all_ff_docker output=DEFAULT_OUTPUT:
 	cp {{ output }}/.env.example {{ output }}/.env
 	cd {{ output }} && uv lock
 	just --justfile {{ output }}/justfile dc all_ff
 
+[group("generation")]
+[doc("Runs linters and tests in the output directory.")]
+output_all_ff output=DEFAULT_OUTPUT:
+	cd {{ output }} && uv lock
+	just --justfile {{ output }}/justfile all_ff
+
 [group("development")]
 [doc("Run all checks and tests (lints, mypy, tests...)")]
-all: lint_full test
+all: lint_full test generation_check generation_check_docker
 
 [group("development")]
 [doc("Run all checks and tests, but fail on first that returns error (lints, mypy, tests...)")]
-all_ff: lint_full_ff test
+all_ff: lint_full_ff test generation_check generation_check_docker
 
 [group("development")]
 [doc("Runs template tests.")]
@@ -102,6 +83,14 @@ lint_fix:
 	uv run ruff check {{PATHS_TO_LINT}} --fix
 	uv run ruff format {{PATHS_TO_LINT}}
 
-_ci_generation_check output=TEST_CATALOG:
-    just copy {{ output }}
-    just run_lints_and_tests_in_output {{ output }}
+[group("development")]
+[group("generation")]
+generation_check_docker data_file="test_answers/docker.yml" output=DOCKER_OUTPUT:
+    just copy {{ data_file }} {{ output }}
+    just output_all_ff_docker {{ output }}
+
+[group("development")]
+[group("generation")]
+generation_check  data_file="test_answers/plain.yml" output=PLAIN_OUTPUT:
+    just copy {{ data_file }} {{ output }}
+    just output_all_ff {{ output }}
