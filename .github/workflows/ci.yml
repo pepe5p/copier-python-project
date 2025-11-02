@@ -1,4 +1,5 @@
-name: "CI - linters and tests"
+name: ci
+run-name: "CI - linters and tests"
 
 on:
   push:

@@ -1,9 +1,11 @@
-name: Release
+name: release
+run-name: "Release"
 
 on:
   workflow_dispatch:
   workflow_run:
-    workflows: [ci.yml]
+    workflows:
+      - ci
     types:
       - completed
     branches:
