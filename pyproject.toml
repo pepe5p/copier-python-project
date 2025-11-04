@@ -1,6 +1,6 @@
 [project]
 name = "copier-python-project"
-version = "0.1.0"
+version = "0.0.0"  # This is a placeholder, version is determined by git tag during CI/CD
 description = "Template for python project."
 authors = [{ name = "Piotr Karaś", email = "pepe500p@gmail.com" }]
 requires-python = ">=3.13"
