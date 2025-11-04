@@ -1,13 +1,9 @@
 name: "Release"
 
 on:
-  workflow_dispatch:
-  workflow_run:
-    workflows: ["CI - linters and tests"]
-    types:
-      - completed
+  push:
     branches:
-      - main
+    - main
 
 concurrency: # Run release builds sequentially
   group: ci-${{ github.ref }}
@@ -19,7 +15,6 @@ jobs:
   release:
     name: release
     runs-on: ubuntu-latest
-    if: ${{ github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success' }}
     steps:
     - name: "Check out code"
       uses: actions/checkout@v5
