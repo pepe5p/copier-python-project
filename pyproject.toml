@@ -8,11 +8,11 @@ dependencies = []
 
 [dependency-groups]
 dev = [
-    "copier>=9.7.1,<10",
-    "mypy>=1.18.2",
-    "pytest>=8.4.1,<9",
-    "ruff>=0.14.2",
-    "types-pyyaml>=6.0.12.20250915",
+    "copier>=9.11.3,<10",
+    "mypy>=1.19.1,<2",
+    "pytest>=9.0.2,<10",
+    "ruff>=0.14.14,<0.15",
+    "types-pyyaml>=6.0.12.20250915,<7",
 ]
 
 [tool.uv]
