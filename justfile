@@ -2,10 +2,12 @@ TEST_CATALOG := "test_catalog"
 DEFAULT_OUTPUT := TEST_CATALOG + "/generated_project"
 DOCKER_OUTPUT := TEST_CATALOG + "/dockerized_project"
 PLAIN_OUTPUT := TEST_CATALOG + "/plain_project"
+LAMBDA_OUTPUT := TEST_CATALOG + "/lambda_project"
 
 TEST_ANSWERS := "test_answers"
 DOCKER_ANSWERS := TEST_ANSWERS + "/docker.yml"
 PLAIN_ANSWERS := TEST_ANSWERS + "/plain.yml"
+LAMBDA_ANSWERS := TEST_ANSWERS + "/lambda.yml"
 
 PATHS_TO_LINT := "tests"
 
@@ -42,10 +44,12 @@ output_all_ff output=DEFAULT_OUTPUT:
 [group("development")]
 [doc("Run all checks and tests (lints, mypy, tests...)")]
 all: lint_full test generation_check generation_check_docker
+	just generation_check {{ LAMBDA_ANSWERS }} {{ LAMBDA_OUTPUT }}
 
 [group("development")]
 [doc("Run all checks and tests, but fail on first that returns error (lints, mypy, tests...)")]
 all_ff: lint_full_ff test generation_check generation_check_docker
+	just generation_check {{ LAMBDA_ANSWERS }} {{ LAMBDA_OUTPUT }}
 
 [group("development")]
 [doc("Runs template tests.")]
@@ -105,3 +109,4 @@ generation_check data_file=PLAIN_ANSWERS output=PLAIN_OUTPUT:
 copy_all:
 	just copy {{ DOCKER_ANSWERS }} {{ DOCKER_OUTPUT }}
 	just copy {{ PLAIN_ANSWERS }} {{ PLAIN_OUTPUT }}
+	just copy {{ LAMBDA_ANSWERS }} {{ LAMBDA_OUTPUT }}

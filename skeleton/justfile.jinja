@@ -1,17 +1,19 @@
 set dotenv-load
 
-{% if docker -%}
-CONTAINER_NAME := "{{ project_name_snake_case }}"
-{% endif -%}
 PYTHONPATH := "./{{ project_name_snake_case }}"
-{%- if docker %}
-WORKDIR := "/code"
-{%- endif %}
 PATHS_TO_LINT := "{{ project_name_snake_case }} tests"
 TEST_PATH := "tests"
 ANSWERS_FILE := ".copier/.copier-answers.copier-python-project.yml"
-
-{% raw -%}
+{%- if is_docker_project %}
+CONTAINER_NAME := "{{ project_name_snake_case }}"
+WORKDIR := "/code"
+{%- endif %}
+{%- if is_lambda_project %}
+BUILD_PATH := "build"
+CURRENT_DATETIME := `date +'%Y%m%d_%H%M%S'`
+PYTHON_VERSION := "3.13"
+{%- endif %}
+{%- raw %}
 [doc("Command run when 'just' is called without any arguments")]
 default: help
 
@@ -27,8 +29,13 @@ all: lint_full test
 [doc("Run all checks and tests, but fail on first that returns error (lints, mypy, tests...)")]
 all_ff: lint_full_ff test
 {%- endraw -%}
-{%- if docker -%}
+{%- if is_docker_project -%}
 {%- raw %}
+
+[group("development")]
+[doc("Run any command inside docker (e.g. just dc bash)")]
+dc command *args:
+	docker compose run --rm -w {{WORKDIR}} {{CONTAINER_NAME}} just {{command}} {{args}}
 
 [group("development")]
 [doc("Open bash console (useful when prefixed with dc, as it opens bash inside docker)")]
@@ -49,17 +56,6 @@ ruff:
 copier_update answers=ANSWERS_FILE skip-answered="true":
 	uv run copier update --answers-file {{answers}} \
 	{{ if skip-answered == "true" { "--skip-answered" } else { "" } }}
-{%- endraw -%}
-{%- if docker -%}
-{%- raw %}
-
-[group("development")]
-[doc("Run any command inside docker (e.g. just dc bash)")]
-dc command *args:
-	docker compose run --rm -w {{WORKDIR}} {{CONTAINER_NAME}} just {{command}} {{args}}
-{%- endraw -%}
-{%- endif -%}
-{%- raw %}
 
 [group("lint")]
 [doc("Run fawltydeps lint check (deopendency issues)")]
@@ -112,3 +108,28 @@ _set_pythonpath path=PYTHONPATH:
 test file=TEST_PATH: _set_pythonpath
 	uv run pytest {{file}} --durations=10
 {% endraw -%}
+{%- if is_lambda_project -%}
+{%- raw %}
+[group("lambda_build")]
+build: build_create_env
+	cd {{ BUILD_PATH }}/pkg && \
+	zip -r ../{% endraw %}{{ project_name_snake_case }}{% raw %}_{{ CURRENT_DATETIME }}.zip .
+
+[group("lambda_build")]
+build_create_env: build_generate_requirements build_install
+
+[group("lambda_build")]
+build_generate_requirements:
+	uv export --frozen --no-dev --no-editable -o {{ BUILD_PATH }}/requirements.txt
+
+[group("lambda_build")]
+build_install:
+	uv pip install \
+	--no-installer-metadata \
+	--no-compile-bytecode \
+	--python-platform x86_64-manylinux2014 \
+	--python {{ PYTHON_VERSION }} \
+	--target {{ BUILD_PATH }}/pkg \
+	-r {{ BUILD_PATH }}/requirements.txt
+{% endraw -%}
+{%- endif -%}

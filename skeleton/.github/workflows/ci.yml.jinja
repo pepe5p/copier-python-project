@@ -16,7 +16,7 @@ jobs:
 
       - name: "Install just"
         uses: extractions/setup-just@v3
-    {%- if docker %}
+    {%- if is_docker_project %}
 
       - name: "Run linters and tests"
         run: just dc all

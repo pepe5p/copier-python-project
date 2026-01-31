@@ -11,7 +11,7 @@ def answers() -> dict[str, Any]:
         "author_name": "test-author",
         "author_email": "author@email.test",
         "project_name": "test-project",
-        "docker": True,
+        "project_type": "dockerized",
         "description": "A test project",
     }
 

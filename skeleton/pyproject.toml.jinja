@@ -5,29 +5,35 @@ description = "{{ description }}"
 authors = [{ name = "{{ author_name }}", email = "{{ author_email }}" }]
 requires-python = ">=3.13"
 readme = "README.md"
-dependencies = []
+dependencies = [
+    {%- if is_lambda_project %}
+    "aws-lambda-powertools>=3.16.0,<4",
+    {%- endif %}
+]
 
 [dependency-groups]
 dev = [
     "copier>=9.11.3,<10",
-    {%- if docker %}
-    "dotenv-linter>=0.7.0,<1",
-    {%- endif %}
     "fawltydeps>=0.20.0,<1.0.0",
     "ipython>=9.9.0,<10",
     "mypy>=1.19.1,<2",
     "pytest-asyncio>=1.3.0,<2",
     "pytest-cov>=7.0.0,<8",
-    {%- if docker %}
-    "pytest-env>=1.2.0,<2",
-    {%- endif %}
     "pytest-mock>=3.15.1,<4",
     "pytest>=9.0.2,<10",
-    {%- if docker %}
+    "ruff>=0.14.14,<0.15.0",
+    {%- if is_docker_project %}
+    "dotenv-linter>=0.7.0,<1",
+    "pytest-env>=1.2.0,<2",
     "python-dotenv>=1.2.1,<2",
     {%- endif %}
-    "ruff>=0.14.14,<0.15.0",
 ]
+
+{%- if is_lambda_project %}
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+{%- endif %}
 
 [tool.uv]
 package = false
@@ -63,6 +69,7 @@ mark-parentheses = true
 
 [tool.ruff.lint.isort]
 order-by-type = false
+known-first-party = ["{{ project_name_snake_case }}"]
 
 [tool.coverage.report]
 exclude_lines = [
@@ -76,23 +83,19 @@ deps = ["pyproject.toml"]
 ignore_unused = [
     # Dev dependencies. This list should contain ALL of them!
     "copier",
-    {%- if docker %}
-    "dotenv-linter",
-    {%- endif %}
     "fawltydeps",
     "ipython",
     "mypy",
     "pytest-asyncio",
     "pytest-cov",
-    {%- if docker %}
-    "pytest-env",
-    {%- endif %}
     "pytest-mock",
-    {%- if docker %}
-    "python-dotenv",
-    {%- endif %}
     "pytest",
     "ruff",
+    {%- if is_docker_project %}
+    "dotenv-linter",
+    "pytest-env",
+    "python-dotenv",
+    {%- endif %}
 ]
 
 [tool.mypy]
@@ -105,7 +108,7 @@ disable_error_code = "misc"
 python_files = ["tests.py", "test_*.py", "*_tests.py"]
 addopts = "--strict-markers -p no:warnings --cov=. --cov-fail-under=90 --cov-config=.coveragerc"
 asyncio_mode = "auto"
-{%- if docker %}
+{%- if is_docker_project %}
 
 [tool.pytest_env]
 FLAVOR = "test"
