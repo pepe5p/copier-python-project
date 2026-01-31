@@ -19,8 +19,13 @@ help:
 	just --list
 
 [group("generation")]
+[doc("Runs copier copy using current local implementation")]
+copy output=DEFAULT_OUTPUT:
+    uv run copier copy . {{ output }} --vcs-ref=HEAD
+
+[group("generation")]
 [doc("Generates repo from template to output directory")]
-copy data_file output=DEFAULT_OUTPUT:
+copy_from_file data_file output=DEFAULT_OUTPUT:
     uv run copier copy . {{ output }} \
     --vcs-ref=HEAD \
     --data-file {{ data_file }} \
@@ -95,18 +100,18 @@ lint_fix:
 [group("development")]
 [group("generation")]
 generation_check_docker data_file=DOCKER_ANSWERS output=DOCKER_OUTPUT:
-    just copy {{ data_file }} {{ output }}
+    just copy_from_file {{ data_file }} {{ output }}
     just output_all_ff_docker {{ output }}
 
 [group("development")]
 [group("generation")]
 generation_check data_file=PLAIN_ANSWERS output=PLAIN_OUTPUT:
-    just copy {{ data_file }} {{ output }}
+    just copy_from_file {{ data_file }} {{ output }}
     just output_all_ff {{ output }}
 
 [group("development")]
 [group("generation")]
 copy_all:
-	just copy {{ DOCKER_ANSWERS }} {{ DOCKER_OUTPUT }}
-	just copy {{ PLAIN_ANSWERS }} {{ PLAIN_OUTPUT }}
-	just copy {{ LAMBDA_ANSWERS }} {{ LAMBDA_OUTPUT }}
+	just copy_from_file {{ DOCKER_ANSWERS }} {{ DOCKER_OUTPUT }}
+	just copy_from_file {{ PLAIN_ANSWERS }} {{ PLAIN_OUTPUT }}
+	just copy_from_file {{ LAMBDA_ANSWERS }} {{ LAMBDA_OUTPUT }}

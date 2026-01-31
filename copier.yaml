@@ -35,17 +35,29 @@ project_name_title_case:
   default: "{{ sanitized_project_name | replace('-', ' ') | title }}"
   when: false
 
+source_catalog_name:
+  type: str
+  default: "{{ project_name_snake_case }}"
+  when: false
+
 description:
   type: str
   help: Provide a short description of the project
 
+specify_author:
+  type: bool
+  default: false
+  help: Would you like to specify author information?
+
 author_name:
   type: str
   help: Provide an author name in format "Firstname Lastname"
+  when: "{{ specify_author }}"
 
 author_email:
   type: str
   help: Provide the author's email address
+  when: "{{ specify_author }}"
 
 project_type:
   type: str
@@ -64,6 +76,17 @@ is_lambda_project:
   type: bool
   default: "{{ project_type == 'lambda' }}"
   when: false
+
+enforce_conventional_commits:
+  type: bool
+  default: true
+  help: Enforce conventional commit messages in Git (needed for automatic GitHub releases)
+
+automatic_gh_release:
+  type: bool
+  default: true
+  help: Enable automatic GitHub releases based on conventional commits
+  when: "{{ enforce_conventional_commits }}"
 
 tasks:
   # Make entrypoint executable if it exists
