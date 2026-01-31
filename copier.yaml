@@ -47,10 +47,23 @@ author_email:
   type: str
   help: Provide the author's email address
 
-docker:
+project_type:
+  type: str
+  help: Select the type of project
+  choices:
+    Empty: empty
+    Docker: dockerized
+    AWS Lambda: lambda
+
+is_docker_project:
   type: bool
-  default: true
-  help: Enable Docker support
+  default: "{{ project_type == 'dockerized' }}"
+  when: false
+
+is_lambda_project:
+  type: bool
+  default: "{{ project_type == 'lambda' }}"
+  when: false
 
 tasks:
   # Make entrypoint executable if it exists

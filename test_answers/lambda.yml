@@ -1,0 +1,5 @@
+author_email: author@email.test
+author_name: test-author
+description: Lambda description.
+project_name: test-lambda
+project_type: lambda

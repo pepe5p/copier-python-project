@@ -2,7 +2,9 @@
 
 {{ description }}
 
-{%- if docker %}
+{%- if is_docker_project %}
+## Development with Docker
+
 1. Build docker image:
     ```
     docker compose build {{ project_name_snake_case }}
@@ -16,9 +18,32 @@
     ```
     just dc bash
     ```
-
-3. Run tests:
-    ```
-    just test
-    ```
 {%- endif %}
+
+### Running Tests
+
+```bash
+just test
+```
+
+### Code Style
+
+The project uses Ruff for linting and formatting, all linters can be run with `just`:
+
+```bash
+just lint_full
+just lint_full_ff  # (fast-fail mode)
+just all  # (lint + tests)
+just all_ff  # (lint + tests in fast-fail mode)
+```
+
+{%- if is_lambda_project %}
+## Deployment to AWS Lambda
+1. Package the application:
+    ```bash
+    just build
+    ```
+
+2. You will see in `/build` directory a zip file ready for deployment to AWS Lambda.
+{%- endif %}
+
