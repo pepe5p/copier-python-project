@@ -1,6 +1,6 @@
 [project]
 name = "{{ project_name_kebab_case }}"
-version = "0.0.0"{% if is_lambda_project %}  # This is a placeholder, version is determined by git tag and commits{% endif %}
+version = "0.0.0"{% if automatic_gh_release %}  # This is a placeholder, version is determined by git tag and commits{% endif %}
 description = "{{ description }}"
 authors = [{% if specify_author %}{ name = "{{ author_name }}", email = "{{ author_email }}" }{% endif %}]
 requires-python = ">=3.13"
