@@ -1,5 +1,6 @@
-author_email: author@email.test
-author_name: test-author
+automatic_gh_release: true
 description: Service description.
+enforce_conventional_commits: true
 project_name: test-service
 project_type: empty
+specify_author: false

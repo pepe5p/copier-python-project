@@ -1,5 +1,7 @@
 author_email: author@email.test
 author_name: test-author
 description: Service description.
+enforce_conventional_commits: false
 project_name: test-service
 project_type: dockerized
+specify_author: true

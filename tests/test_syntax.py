@@ -1,5 +1,4 @@
 import mimetypes
-from enum import StrEnum
 from pathlib import Path
 
 import pytest
@@ -11,23 +10,10 @@ from .parsers import PARSERS
 JINJA_LEFTOVERS = ["{%", "{#", "%}", "#}"]
 
 
-class ProjectType(StrEnum):
-    EMPTY = "empty"
-    DOCKERIZED = "dockerized"
-    AWS_LAMBDA = "lambda"
-
-
-ALL_PROJECT_TYPES = list(ProjectType)
-
-
-@pytest.mark.parametrize("project_type", ALL_PROJECT_TYPES)
 def test_no_leftovers(
-    project_type: ProjectType,
     tmp_path: Path,
     answers: dict,
 ) -> None:
-    answers["project_type"] = project_type
-
     run_result = generate_project(tmp_path, answers)
 
     assert run_result[1] == 0
@@ -69,14 +55,10 @@ def test_determine_file_type(filename: str, expected: str) -> None:
     assert determine_file_type(path=Path(filename)) == expected
 
 
-@pytest.mark.parametrize("project_type", ALL_PROJECT_TYPES)
 def test_files_syntax(
-    project_type: ProjectType,
     tmp_path: Path,
     answers: dict,
 ) -> None:
-    answers["project_type"] = project_type
-
     run_result = generate_project(tmp_path, answers)
 
     assert run_result[1] == 0

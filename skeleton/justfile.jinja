@@ -1,7 +1,7 @@
 set dotenv-load
 
-PYTHONPATH := "./{{ project_name_snake_case }}"
-PATHS_TO_LINT := "{{ project_name_snake_case }} tests"
+PYTHONPATH := "./{{ source_catalog_name }}"
+PATHS_TO_LINT := "{{ source_catalog_name }} tests"
 TEST_PATH := "tests"
 ANSWERS_FILE := ".copier/.copier-answers.copier-python-project.yml"
 {%- if is_docker_project %}
@@ -113,7 +113,7 @@ test file=TEST_PATH: _set_pythonpath
 [group("lambda_build")]
 build: build_create_env
 	cd {{ BUILD_PATH }}/pkg && \
-	zip -r ../{% endraw %}{{ project_name_snake_case }}{% raw %}_{{ CURRENT_DATETIME }}.zip .
+	zip -r ../{% endraw %}{{ source_catalog_name }}{% raw %}_{{ CURRENT_DATETIME }}.zip .
 
 [group("lambda_build")]
 build_create_env: build_generate_requirements build_install

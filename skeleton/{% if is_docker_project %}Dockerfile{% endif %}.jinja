@@ -43,7 +43,7 @@ RUN --mount=type=cache,target=/root/.cache/uv \
 
 # Adds our application code to the image
 COPY . /code
-WORKDIR /code/{{ project_name_snake_case }}
+WORKDIR /code/{{ source_catalog_name }}
 
 # Sync the project
 RUN --mount=type=cache,target=/root/.cache/uv \

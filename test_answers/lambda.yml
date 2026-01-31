@@ -1,5 +1,8 @@
 author_email: author@email.test
 author_name: test-author
+automatic_gh_release: false
 description: Lambda description.
+enforce_conventional_commits: true
 project_name: test-lambda
 project_type: lambda
+specify_author: true
