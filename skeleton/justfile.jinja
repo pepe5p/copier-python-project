@@ -1,19 +1,19 @@
 set dotenv-load
 
-PYTHONPATH := "./{{ source_catalog_name }}"
 PATHS_TO_LINT := "{{ source_catalog_name }} tests"
 TEST_PATH := "tests"
 ANSWERS_FILE := ".copier/.copier-answers.copier-python-project.yml"
+{%- if is_lambda_project %}
+BUILD_DIR := "build"
+CURRENT_DATETIME := `date +'%Y%m%d_%H%M%S'`
+PYTHON_VERSION := "3.13"
+{%- endif %}
 {%- if is_docker_project %}
 CONTAINER_NAME := "{{ project_name_snake_case }}"
 WORKDIR := "/code"
 {%- endif %}
-{%- if is_lambda_project %}
-BUILD_PATH := "build"
-CURRENT_DATETIME := `date +'%Y%m%d_%H%M%S'`
-PYTHON_VERSION := "3.13"
-{%- endif %}
 {%- raw %}
+
 [doc("Command run when 'just' is called without any arguments")]
 default: help
 
@@ -28,22 +28,6 @@ all: lint_full test
 [group("development")]
 [doc("Run all checks and tests, but fail on first that returns error (lints, mypy, tests...)")]
 all_ff: lint_full_ff test
-{%- endraw -%}
-{%- if is_docker_project -%}
-{%- raw %}
-
-[group("development")]
-[doc("Run any command inside docker (e.g. just dc bash)")]
-dc command *args:
-	docker compose run --rm -w {{WORKDIR}} {{CONTAINER_NAME}} just {{command}} {{args}}
-
-[group("development")]
-[doc("Open bash console (useful when prefixed with dc, as it opens bash inside docker)")]
-@bash:
-	bash
-{%- endraw -%}
-{%- endif -%}
-{%- raw %}
 
 [group("lint")]
 [doc("Run ruff lint check (code formatting)")]
@@ -90,37 +74,53 @@ alias full_lint_ff := lint_full_ff
 
 [group("lint")]
 [doc("Run mypy check (type checking)")]
-mypy: _set_pythonpath
+mypy:
 	uv run mypy {{PATHS_TO_LINT}} --show-error-codes --show-traceback --implicit-reexport
 
 [group("development")]
-[doc("Open python console (useful when prefixed with dc, as it opens python console inside docker)")]
-ps:
-	PYTHONPATH={{PYTHONPATH}} uv run ipython
+[doc("Run IPython with custom startup script")]
+ps startup_script="ipython_startup.py":
+	PYTHONSTARTUP={{ startup_script }} uv run ipython
 alias ipython := ps
-
-[doc("Helper command, sets PYTHONPATH")]
-_set_pythonpath path=PYTHONPATH:
-	PYTHONPATH={{path}}
 
 [group("development")]
 [doc("Run non-integration tests (optionally specify file=path/to/test_file.py)")]
-test file=TEST_PATH: _set_pythonpath
+test file=TEST_PATH:
 	uv run pytest {{file}} --durations=10
+{%- endraw -%}
+{%- if is_docker_project -%}
+{%- raw %}
+
+[group("development")]
+[doc("Run any command inside docker (e.g. just dc bash)")]
+dc command *args:
+	docker compose run --rm -w {{WORKDIR}} {{CONTAINER_NAME}} just {{command}} {{args}}
+
+[group("development")]
+[doc("Open bash console (useful when prefixed with dc, as it opens bash inside docker)")]
+@bash:
+	bash
+{%- endraw -%}
+{%- endif -%}
+{%- raw %}
 {% endraw -%}
 {%- if is_lambda_project -%}
 {%- raw %}
 [group("lambda_build")]
 build: build_create_env
-	cd {{ BUILD_PATH }}/pkg && \
+	cd {{ BUILD_DIR }}/pkg && \
 	zip -r ../{% endraw %}{{ source_catalog_name }}{% raw %}_{{ CURRENT_DATETIME }}.zip .
 
 [group("lambda_build")]
-build_create_env: build_generate_requirements build_install
+build_create_env: clear_build_dir build_generate_requirements build_install copy_shim
+
+[group("lambda_build")]
+clear_build_dir:
+	rm -rf {{ BUILD_DIR }}/pkg
 
 [group("lambda_build")]
 build_generate_requirements:
-	uv export --frozen --no-dev --no-editable -o {{ BUILD_PATH }}/requirements.txt
+	uv export --frozen --no-dev --no-editable -o {{ BUILD_DIR }}/requirements.txt
 
 [group("lambda_build")]
 build_install:
@@ -129,7 +129,11 @@ build_install:
 	--no-compile-bytecode \
 	--python-platform x86_64-manylinux2014 \
 	--python {{ PYTHON_VERSION }} \
-	--target {{ BUILD_PATH }}/pkg \
-	-r {{ BUILD_PATH }}/requirements.txt
+	--target {{ BUILD_DIR }}/pkg \
+	-r {{ BUILD_DIR }}/requirements.txt
+
+[group("lambda_build")]
+copy_shim:
+    cp lambda_function.py {{ BUILD_DIR }}/pkg/ || true
 {% endraw -%}
 {%- endif -%}

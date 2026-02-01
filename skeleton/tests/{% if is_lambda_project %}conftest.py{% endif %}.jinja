@@ -1,7 +1,7 @@
 from dataclasses import dataclass
-from typing import Any
 
 import pytest
+from aws_lambda_powertools.utilities.data_classes import APIGatewayProxyEventV2
 
 
 @dataclass
@@ -18,8 +18,8 @@ def lambda_context() -> LambdaContext:
 
 
 @pytest.fixture()
-def api_gw_event() -> dict[str, Any]:
-    return {
+def api_gw_event() -> APIGatewayProxyEventV2:
+    event_body = {
         "headers": {},
         "body": "",
         "requestContext": {
@@ -35,3 +35,4 @@ def api_gw_event() -> dict[str, Any]:
         "resource": "/{some_id}/some_path",
         "rawPath": "/some_id/some_path",
     }
+    return APIGatewayProxyEventV2(event_body)
