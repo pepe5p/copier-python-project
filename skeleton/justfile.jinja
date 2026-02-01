@@ -109,7 +109,7 @@ dc command *args:
 [group("lambda_build")]
 build: build_create_env
 	cd {{ BUILD_DIR }}/pkg && \
-	zip -r ../{% endraw %}{{ source_catalog_name }}{% raw %}_{{ CURRENT_DATETIME }}.zip .
+	zip -r ../{% endraw %}{{ project_name_snake_case }}{% raw %}_{{ CURRENT_DATETIME }}.zip .
 
 [group("lambda_build")]
 build_create_env: clear_build_dir build_generate_requirements build_install copy_shim
